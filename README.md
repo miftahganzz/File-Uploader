@@ -1,7 +1,7 @@
 # File Uploader Website
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/miftahganzz/Image-Uploader/main/assets/preview.png" alt="File Upload Screen Shot">
+  <img src="https://raw.githubusercontent.com/miftahganzz/File-Uploader/main/uploader.png" alt="File Upload Screen Shot">
 </p>
 
 <p align="center">
