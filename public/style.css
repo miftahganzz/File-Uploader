@@ -1,0 +1,75 @@
+.neu-container {
+    background-color: #d9e2ec;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow:
+        5px 5px 10px rgba(0, 0, 0, 0.1),
+        -5px -5px 10px rgba(255, 255, 255, 0.5);
+    transition:
+        transform 0.3s,
+        box-shadow 0.3s;
+}
+
+.neu-container:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        3px 3px 8px rgba(0, 0, 0, 0.1),
+        -3px -3px 8px rgba(255, 255, 255, 0.5);
+}
+
+.neu-button {
+    background-color: #d9e2ec;
+    color: #4f46e5;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: bold;
+    box-shadow:
+        5px 5px 10px rgba(0, 0, 0, 0.1),
+        -5px -5px 10px rgba(255, 255, 255, 0.5);
+    transition:
+        transform 0.3s,
+        box-shadow 0.3s;
+}
+
+.neu-button:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        3px 3px 8px rgba(0, 0, 0, 0.1),
+        -3px -3px 8px rgba(255, 255, 255, 0.5);
+}
+
+.footer {
+    position: relative;
+    width: 100%;
+    background-color: transparent;
+    padding: 0.5rem;
+    text-align: center;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+.footer a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer a:hover {
+    color: #4f46e5;
+}
+
+@media (min-width: 768px) {
+    .neu-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+}
+
+#progressContainer {
+    height: 12px;
+    padding: 3px;
+}
+#progressText {
+    top: -20px;
+}
