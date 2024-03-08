@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Upload and share your files securely with our File Uploader.">
   <meta name="keywords" content="file uploader, upload, share files, file sharing, document sharing">
   <meta name="author" content="Miftah">
@@ -16,14 +17,64 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ITzpire Uploader">
   <meta property="og:locale" content="id_ID">
-    <title>File Uploader</title>
+  <title>File Uploader</title>
   <link rel="icon" type="image/png" href="https://i.ibb.co/GphSk0T/upload.png">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .dark-background {
+      background-color: #333;
+    }
+
+    .dark-background li {
+      color: #fff;
+    }
+  </style>
 </head>
 
 <body class="bg-gradient-to-r from-blue-400 to-indigo-500 min-h-screen flex flex-col items-center justify-center p-10 relative">
+  <!-- navbar puh -->
+  <nav class="bg-white border-gray-200 dark:bg-gray-900">
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Arifzyn Logo" />
+        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Arifzyn</span>
+      </a>
+      <button id="btnToggleNavbar" data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+        </svg>
+      </button>
+      <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+        <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 dark-background">
+          <li>
+            <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Home</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">About</a>
+          </li>
+          <li>
+            <a href="/privacy-policy" class="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Privacy Policy</a>
+          </li>
+          <li>
+            <a href="/contact-us" class="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</a>
+          </li>
+          <li>
+            <a href="/api-docs" class="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">API Docs</a>
+          </li>
+        </ul>
+      </div>
     <div class="neu-container w-full max-w-4xl">
         <h1 class="text-3xl font-bold text-center mb-8">File Uploader</h1>
         <!-- File upload form -->
@@ -65,14 +116,82 @@
             </div>
         </div>
     </div>
+  </nav>
 
-    <!-- Footer -->
-    <div class="footer">
-        <a href="/privacy-policy">Privacy Policy</a> |
-        <a href="/api-docs">API Docs</a>
+  <div class="neu-container w-full max-w-4xl">
+    <h1 class="text-3xl font-bold text-center mb-8">File Uploader</h1>
+    <!-- File upload form -->
+    <form id="uploadForm" class="mb-8" action="/upload" method="post" enctype="multipart/form-data">
+      <div class="border-2 border-dashed border-gray-300 p-6 rounded-md text-center">
+        <input type="file" name="file" id="fileInput" class="hidden" />
+        <label for="fileInput" class="cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M14.5 2a.5.5 0 0 1 .5.5V9h4a.5.5 0 0 1 .354.854l-7 7a.5.5 0 0 1-.708 0l-7-7A.5.5 0 0 1 2 9h4V2.5a.5.5 0 0 1 .5-.5h3zm-4 0H6v6H2.5L10 17.5 17.5 8H14V2.5a.5.5 0 0 0-.5-.5z" />
+          </svg>
+          <span id="fileLabel" class="block text-gray-400 mt-2">Choose a file or drag it here</span>
+        </label>
+      </div>
+      <div id="progressContainer" class="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-4 hidden">
+        <div id="progressBar" class="absolute top-0 left-0 h-full bg-blue-500" style="width: 0"></div>
+        <div id="progressText" class="absolute top-0 left-0 h-full text-xs text-center text-gray-600 w-full">0%</div>
+      </div>
+      <button type="button" id="btnUpload" class="neu-button block mx-auto mt-5">Upload</button>
+    </form>
+    <!-- File details -->
+    <div id="fileDetails" class="hidden">
+      <h2 class="text-xl font-bold mb-4">File Details</h2>
+      <div id="preview" class="file-preview mb-4"></div>
+      <div id="details" class="mb-4"></div>
+      <!-- URL containers -->
+      <div class="url-container hidden">
+        <div id="fileUrl" class="flex items-center justify-between bg-gray-100 p-3 rounded-md mb-2">
+          <span id="fileText" class="flex-1">File URL: <br> <span id="fileValue" class="font-bold" style="font-size: smaller;"></span></span>
+          <span class="flex items-center">
+            <button id="btnCopyFile" class="mr-2">
+              <i class="fas fa-copy"></i>
+            </button>
+          </span>
+        </div>
+
+        <div id="downloadUrl" class="flex items-center justify-between bg-gray-100 p-3 rounded-md mb-2">
+          <span id="downloadText" class="flex-1">Download URL: <br> <span id="downloadValue" class="font-bold" style="font-size: smaller;"></span></span>
+          <span class="flex items-center">
+            <button id="btnCopyDownload" class="mr-2">
+              <i class="fas fa-copy"></i>
+            </button>
+          </span>
+        </div>
+
+        <div id="deleteUrl" class="flex items-center justify-between bg-gray-100 p-3 rounded-md mb-2">
+          <span id="deleteText" class="flex-1">Delete URL: <br> <span id="deleteValue" class="font-bold" style="font-size: smaller;"></span></span>
+          <span class="flex items-center">
+            <button id="btnCopyDelete" class="mr-2">
+              <i class="fas fa-copy"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+
     </div>
+  </div>
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+  <!-- Footer -->
+  <div class="footer">
+    <a href="/privacy-policy">Privacy Policy</a> |
+    <a href="/api-docs">API Docs</a>
+  </div>
+
+  <!-- JavaScript -->
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+      const navbar = document.getElementById("navbar-default");
+      const btnToggleNavbar = document.getElementById("btnToggleNavbar");
+
+      btnToggleNavbar.addEventListener("click", () => {
+        navbar.classList.toggle("hidden"); // Tambahkan atau hapus class "hidden" pada daftar saat tombol diklik
+      });
+    });
+  </script>
+  <script src="script.js"></script>
 </body>
 </html>
