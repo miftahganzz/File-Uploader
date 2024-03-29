@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use('/file', express.static(path.join(__dirname, 'file')));
 
 app.get("/", (req, res) => {
