@@ -3,6 +3,7 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const basicAuth = require('express-basic-auth');
 const swaggerUi = require("swagger-ui-express");
 
 const app = express();
@@ -10,17 +11,20 @@ const port = 8080;
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "file/");
+    cb(null, "./file/");
   },
   filename: function (req, file, cb) {
-    crypto.randomBytes(6, (err, raw) => {
+    crypto.randomBytes(3, (err, raw) => {
       if (err) return cb(err);
-      cb(null, raw.toString("hex") + path.extname(file.originalname));
+      cb(null, Date.now() + "-" + raw.toString("hex") + path.extname(file.originalname));
     });
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // Limit file size to 10MB
+}).single("file");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/file', express.static(path.join(__dirname, 'file')));
@@ -29,32 +33,42 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+app.get("/galeri", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "library.html"));
+});
+
 app.get("/privacy-policy", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "privacy.html"));
 });
 
-app.post("/upload", upload.single("file"), (req, res) => {
-  const fileName = req.file.filename;
-  const fileUrl = `http://${req.hostname}/file/${fileName}`;
-  const downloadUrl = `http://${req.hostname}/download/${fileName}`;
-  const deleteUrl = `http://${req.hostname}/delete/${fileName}`;
+app.post("/upload", (req, res) => {
+  upload(req, res, (err) => {
+    if (err) {
+      res.status(500).send("An error occurred while uploading the file.");
+    } else {
+      const fileName = req.file.filename;
+      const fileUrl = `http://${req.hostname}/file/${fileName}`;
+      const downloadUrl = `http://${req.hostname}/download/${fileName}`;
+      const deleteUrl = `http://${req.hostname}/delete/${fileName}`;
 
-  const fileDetails = {
-    fileName: fileName,
-    originalName: req.file.originalname,
-    size: req.file.size,
-    extension: path.extname(req.file.originalname),
-    uploadTime: new Date().toISOString(),
-  };
+      const fileDetails = {
+        fileName: fileName,
+        originalName: req.file.originalname,
+        size: req.file.size,
+        extension: path.extname(req.file.originalname),
+        uploadTime: new Date().toISOString(),
+      };
 
-  const responseData = {
-    fileDetails: fileDetails,
-    fileUrl: fileUrl,
-    downloadUrl: downloadUrl,
-    deleteUrl: deleteUrl,
-    message: "File uploaded successfully",
-  };
-  res.json(responseData);
+      const responseData = {
+        fileDetails: fileDetails,
+        fileUrl: fileUrl,
+        downloadUrl: downloadUrl,
+        deleteUrl: deleteUrl,
+        message: "File uploaded successfully",
+      };
+      res.json(responseData);
+    }
+  });
 });
 
 app.get("/download/:fileName", (req, res) => {
@@ -206,6 +220,148 @@ const swaggerDocument = {
 };
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+
+const folderPath = path.join(__dirname, 'file');
+
+app.use((req, res, next) => {
+  const oneWeekAgo = new Date();
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+  fs.readdir(folderPath, (err, files) => {
+    if (err) {
+      console.error('Error reading directory:', err);
+      return next(err);
+    }
+
+    files.forEach(file => {
+      const filePath = path.join(folderPath, file);
+      fs.stat(filePath, (err, stats) => {
+        if (err) {
+          console.error('Error getting file stats:', err);
+          return next(err);
+        }
+
+        const modifiedTime = new Date(stats.mtime);
+        if (modifiedTime < oneWeekAgo) {
+          fs.unlink(filePath, err => {
+            if (err) {
+              console.error('Error deleting file:', err);
+              return next(err);
+            }
+            console.log('File deleted:', file);
+          });
+        }
+      });
+    });
+  });
+
+  next();
+});
+
+app.get('/file-info', (req, res, next) => {
+  let totalFiles = 0;
+  let totalSize = 0;
+
+  fs.readdir(folderPath, (err, files) => {
+    if (err) {
+      console.error('Error reading directory:', err);
+      return next(err);
+    }
+
+    files.forEach(file => {
+      const filePath = path.join(folderPath, file);
+      fs.stat(filePath, (err, stats) => {
+        if (err) {
+          console.error('Error getting file stats:', err);
+          return next(err);
+        }
+
+        if (stats.isFile()) {
+          totalFiles++;
+          totalSize += stats.size;
+        }
+
+        if (totalFiles === files.length) {
+          res.json({
+            totalFiles,
+            totalSize: `${(totalSize / (1024 * 1024)).toFixed(2)} MB`
+          });
+        }
+      });
+    });
+  });
+});
+
+app.use(basicAuth({
+  users: { 'miftah': '12345' },
+  challenge: true
+}));
+
+app.get('/library', (req, res, next) => {
+  const folderPath = path.join(__dirname, 'file');
+
+  fs.readdir(folderPath, (err, files) => {
+    if (err) {
+      console.error('Error reading directory:', err);
+      return next(err);
+    }
+
+    const fileList = files.map(file => {
+      const fileType = getFileType(file);
+      return {
+        name: file,
+        type: fileType
+      };
+    });
+
+    res.json(fileList);
+  });
+});
+
+app.get('/library/download/:fileName', (req, res, next) => {
+  const fileName = req.params.fileName;
+  const filePath = path.join(__dirname, 'file', fileName);
+
+  res.download(filePath, fileName, err => {
+    if (err) {
+      console.error('Error downloading file:', err);
+      return next(err);
+    }
+  });
+});
+
+app.delete('/library/delete/:fileName', (req, res, next) => {
+  const fileName = req.params.fileName;
+  const filePath = path.join(__dirname, 'file', fileName);
+
+  fs.unlink(filePath, err => {
+    if (err) {
+      console.error('Error deleting file:', err);
+      return next(err);
+    }
+    res.sendStatus(200);
+  });
+});
+
+function getFileType(fileName) {
+  const ext = path.extname(fileName).toLowerCase();
+  if (ext === '.jpg' || ext === '.jpeg' || ext === '.png' || ext === '.gif') {
+    return 'image';
+  } else if (ext === '.mp4' || ext === '.avi' || ext === '.mkv') {
+    return 'video';
+  } else if (ext === '.doc' || ext === '.docx' || ext === '.txt') {
+    return 'document';
+  } else if (ext === '.pdf') {
+    return 'pdf';
+  } else {
+    return 'other';
+  }
+}
+
+app.use(function(req, res, next) {
+  res.status(404);
+  res.sendFile(__dirname + '/public/404.html');
+});
 
 app.listen(port, () => {
   console.log(`Server is listening at http://localhost:${port}`);
