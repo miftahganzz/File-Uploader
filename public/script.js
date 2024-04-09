@@ -57,7 +57,7 @@ function handleFileUpload() {
         hideProgressBar();
     }
 }
-
+    
 document.getElementById("btnUpload").addEventListener("click", function () {
     const fileInput = document.getElementById("fileInput");
     const file = fileInput.files[0];
@@ -66,6 +66,8 @@ document.getElementById("btnUpload").addEventListener("click", function () {
     }
     const formData = new FormData();
     formData.append("file", file);
+    const expirationTime = document.getElementById("expirationTime").value;
+    formData.append("expirationTime", expirationTime);
     const progressBar = document.getElementById("progressBar");
     const progressText = document.getElementById("progressText");
     const xhr = new XMLHttpRequest();
@@ -112,10 +114,14 @@ function displayFileDetails(responseData) {
     const details = document.getElementById("details");
     details.innerHTML = `
         <p>File Name: ${fileDetails.fileName}</p>
+        <hr />
         <p>Original Name: ${fileDetails.originalName}</p>
+        <hr />
         <p>File Size: ${formatBytes(fileDetails.size)}</p>
+        <hr />
         <p>Extension: ${fileDetails.extension}</p>
-        <p>Upload Time: ${fileDetails.uploadTime}</p>
+        <hr />
+        <p>Upload Time: ${new Date(fileDetails.uploadTime).toLocaleString()}</p>
     `;
 
     const fileDetailsContainer = document.getElementById("fileDetails");
@@ -186,3 +192,15 @@ function copyToClipboard(valueId) {
 document.getElementById("btnCopyFile").addEventListener("click", () => copyToClipboard("fileValue"));
 document.getElementById("btnCopyDownload").addEventListener("click", () => copyToClipboard("downloadValue"));
 document.getElementById("btnCopyDelete").addEventListener("click", () => copyToClipboard("deleteValue"));
+
+// Fetch file info
+fetch('/file-info')
+  .then(response => response.json())
+  .then(data => {
+    const fileInfoContainer = document.getElementById('fileInfo');
+
+    fileInfoContainer.innerHTML = `Total files: ${data.totalFiles}, Total size: ${data.totalSize}`;
+  })
+  .catch(error => {
+    console.error('Error fetching file info:', error);
+  });

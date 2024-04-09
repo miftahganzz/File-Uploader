@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 Not Found</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #202124;
+    }
+
+    @keyframes blink {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .blink {
+      animation: blink 1s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full text-center">
+      <h1 class="text-5xl font-bold text-white mb-8">404</h1>
+      <p class="text-xl text-gray-300 mb-4 fadeIn">Oops! The page you're looking for couldn't be found.</p>
+      <div class="text-blue-400 text-xl mb-8">
+        <span class="blink">.</span><span class="blink">.</span><span class="blink">.</span>
+      </div>
+      <a href="/" class="text-xl text-blue-400 hover:text-blue-600">Back to Home</a>
+    </div>
+  </div>
+</body>
+</html>

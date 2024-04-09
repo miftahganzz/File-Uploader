@@ -71,7 +71,7 @@
 </head>
 <body class="bg-gradient-to-r from-blue-400 to-indigo-500 min-h-screen flex flex-col items-center justify-center p-10 relative">
     <!-- Navbar -->
-    <nav>
+    <nav class="mb-5">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="https://cdn.itzpire.site" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="https://www.svgrepo.com/show/303615/github-icon-1-logo.svg" class="h-7" alt="Logo" />
@@ -100,7 +100,7 @@
                         <a href="/privacy-policy" class="block py-2 px-3 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Privacy Policy</a>
                     </li>
                     <li>
-                        <a href="/contact-us" class="block py-2 px-3 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</a>
+                        <a href="mailto:emailkamu@gmail.com" class="block py-2 px-3 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</a>
                     </li>
                     <li>
                         <a href="/api-docs" class="block py-2 px-3 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">API Docs</a>
@@ -110,17 +110,26 @@
         </div>
     </nav>
     <!-- Main content -->
-    <div class="neu-container w-full max-w-4xl">
-        <h1 class="text-3xl font-bold text-center mb-8">File Uploader</h1>
-        <!-- File upload form -->
-        <form id="uploadForm" class ="mb-8" action="/upload" method="post" enctype="multipart/form-data">
+   <div class="neu-container w-full max-w-4xl">
+    <h1 class="text-3xl font-bold text-center mb-8">File Uploader</h1>
+    <div id="fileInfo" class="border-2 border-dashed border-gray-300 rounded-md text-center mb-4 p-1">
+    </div>
+<!-- File upload form -->
+        <form id="uploadForm" class="mb-8" action="/upload" method="post" enctype="multipart/form-data">
+            <div class="mb-4">
+                <label for="expirationTime" class="block text-gray-700 font-bold mb-2">Expiration Time:</label>
+                <select id="expirationTime" name="expirationTime" class="block w-full bg-gray-200 border border-gray-300 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                    <option value="1">1 Hour</option>
+                    <option value="24">1 Day</option>
+                    <option value="168">1 Week</option>
+                    <option value="720">1 Month</option>
+                </select>
+            </div>
             <div class="border-2 border-dashed border-gray-300 p-6 rounded-md text-center">
                 <input type="file" name="file" id="fileInput" class="hidden" />
                 <label for="fileInput" class="cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M14.5 2a.5.5 0 0 1 .5.5V9h4a.5.5 0 0 1 .354.854l-7 7a.5.5 0 0 1-.708 0l-7-7A.5.5 0 0 1 2 9h4V2.5a.5.5 0 0 1 .5-.5h3zm-4 0H6v6H2.5L10 17.5 17.5 8H14V2.5a.5.5 0 0 0-.5-.5z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M14.5 2a.5.5 0 0 1 .5.5V9h4a.5.5 0 0 1 .354.854l-7 7a.5.5 0 0 1-.708 0l-7-7A.5.5 0 0 1 2 9h4V2.5a.5.5 0 0 1 .5-.5h3zm-4 0H6v6H2.5L10 17.5 17.5 8H14V2.5a.5.5 0 0 0-.5-.5z" />
                     </svg>
                     <span id="fileLabel" class="block text-gray-400 mt-2">Choose a file or drag it here</span>
                 </label>
@@ -135,7 +144,7 @@
         <div id="fileDetails" class="hidden">
             <h2 class="text-xl font-bold mb-4">File Details</h2>
             <div id="preview" class="file-preview mb-4"></div>
-            <div id="details" class="mb-4"></div>
+            <div id="details" class="mb-4 items-center justify-between bg-gray-100 p-3 rounded-md mb-2"></div>
             <!-- URL containers -->
             <div class="url-container hidden">
                 <div id="fileUrl" class="flex items-center justify-between bg-gray-100 p-3 rounded-md mb-2">
