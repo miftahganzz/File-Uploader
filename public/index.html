@@ -218,6 +218,18 @@
 
             fileInput.addEventListener("change", handleFileUpload);
         });
+
+        // Fetch file info
+fetch('/file-info')
+  .then(response => response.json())
+  .then(data => {
+    const fileInfoContainer = document.getElementById('fileInfo');
+
+    fileInfoContainer.innerHTML = `Total files: ${data.totalFiles}, Total size: ${data.totalSize}`;
+  })
+  .catch(error => {
+    console.error('Error fetching file info:', error);
+  });
     </script>
     <script src="script.js"></script>
 </body>
