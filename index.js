@@ -6,7 +6,7 @@ const crypto = require("crypto");
 const swaggerUi = require("swagger-ui-express");
 
 const app = express();
-const port = 8080 || process.env.PORT;
+const port = process.env.PORT || 3000;
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
